@@ -40,7 +40,7 @@
     .galeria {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
+      gap: 25px; /* aumenta o espaçamento entre os blocos */
       justify-items: center;
     }
 
@@ -50,15 +50,16 @@
       background-color: #fafafa;
       border: 2px dashed #ccc;
       border-radius: 12px;
-      padding: 10px;
+      padding: 15px;
       text-align: center;
       position: relative;
       overflow: hidden;
+      min-height: 260px; /* mantém altura consistente mesmo sem imagem */
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      height: 260px; /* garante altura uniforme */
-      transition: box-shadow 0.3s, border-color 0.3s;
+      box-sizing: border-box;
+      transition: border-color 0.3s, box-shadow 0.3s;
     }
 
     .item:hover {
@@ -68,22 +69,11 @@
 
     .item img {
       width: 100%;
-      height: 180px;
+      height: 200px;
       object-fit: cover;
       border-radius: 10px;
-      background-color: #eaeaea;
-    }
-
-    .placeholder {
-      width: 100%;
-      height: 180px;
-      background-color: #eaeaea;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #999;
-      font-size: 0.9em;
+      margin-bottom: 10px;
+      background-color: #eaeaea; /* fundo visível quando imagem não carrega */
     }
 
     .item input {
@@ -114,55 +104,47 @@
 
     <div class="galeria">
       <div class="item">
-        <div class="placeholder" id="box1">Prévia da imagem 1</div>
+        <img id="img1" src="" alt="Imagem 1">
         <input type="text" id="link1" placeholder="Cole o link da imagem 1...">
       </div>
       <div class="item">
-        <div class="placeholder" id="box2">Prévia da imagem 2</div>
+        <img id="img2" src="" alt="Imagem 2">
         <input type="text" id="link2" placeholder="Cole o link da imagem 2...">
       </div>
       <div class="item">
-        <div class="placeholder" id="box3">Prévia da imagem 3</div>
+        <img id="img3" src="" alt="Imagem 3">
         <input type="text" id="link3" placeholder="Cole o link da imagem 3...">
       </div>
       <div class="item">
-        <div class="placeholder" id="box4">Prévia da imagem 4</div>
+        <img id="img4" src="" alt="Imagem 4">
         <input type="text" id="link4" placeholder="Cole o link da imagem 4...">
       </div>
     </div>
   </div>
 
   <script>
-    // Função que atualiza uma imagem específica
-    function atualizarImagem(id) {
-      const input = document.getElementById(`link${id}`);
-      const box = document.getElementById(`box${id}`);
-      const url = input.value.trim();
-
-      if (url.startsWith("http://") || url.startsWith("https://")) {
-        box.innerHTML = `<img src="${url}" alt="Imagem ${id}" onerror="this.onerror=null; this.src=''; box.innerHTML='Link inválido';">`;
-        localStorage.setItem(`imgLink${id}`, url);
-      } else if (url === "") {
-        box.innerHTML = `Prévia da imagem ${id}`;
-        localStorage.removeItem(`imgLink${id}`);
-      }
-    }
-
-    // Carrega as imagens salvas no localStorage
+    // Carregar imagens salvas ao iniciar
     window.addEventListener("DOMContentLoaded", () => {
       for (let i = 1; i <= 4; i++) {
-        const input = document.getElementById(`link${i}`);
-        const box = document.getElementById(`box${i}`);
         const savedLink = localStorage.getItem(`imgLink${i}`);
+        const img = document.getElementById(`img${i}`);
+        const input = document.getElementById(`link${i}`);
 
         if (savedLink) {
-          box.innerHTML = `<img src="${savedLink}" alt="Imagem ${i}">`;
+          img.src = savedLink;
           input.value = savedLink;
-        } else {
-          box.innerHTML = `Prévia da imagem ${i}`;
         }
 
-        input.addEventListener("input", () => atualizarImagem(i));
+        input.addEventListener("input", () => {
+          const url = input.value.trim();
+          if (url.startsWith("http://") || url.startsWith("https://")) {
+            img.src = url;
+            localStorage.setItem(`imgLink${i}`, url);
+          } else if (url === "") {
+            img.src = "";
+            localStorage.removeItem(`imgLink${i}`);
+          }
+        });
       }
     });
   </script>
