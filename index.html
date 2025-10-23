@@ -40,7 +40,7 @@
     .galeria {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 25px; /* aumenta o espaçamento entre os blocos */
+      gap: 25px;
       justify-items: center;
     }
 
@@ -54,7 +54,7 @@
       text-align: center;
       position: relative;
       overflow: hidden;
-      min-height: 260px; /* mantém altura consistente mesmo sem imagem */
+      min-height: 260px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -73,20 +73,25 @@
       object-fit: cover;
       border-radius: 10px;
       margin-bottom: 10px;
-      background-color: #eaeaea; /* fundo visível quando imagem não carrega */
+      background-color: #eaeaea;
     }
 
-    .item input {
+    textarea {
       width: 100%;
+      min-height: 45px;
       padding: 8px 10px;
       font-size: 0.9em;
       border: 1px solid #ccc;
       border-radius: 8px;
       outline: none;
+      resize: none; /* impede redimensionar manualmente */
+      overflow-wrap: break-word; /* quebra palavras longas */
+      white-space: pre-wrap;
+      box-sizing: border-box;
       transition: border-color 0.3s;
     }
 
-    .item input:focus {
+    textarea:focus {
       border-color: #0078d7;
     }
 
@@ -105,19 +110,19 @@
     <div class="galeria">
       <div class="item">
         <img id="img1" src="" alt="Imagem 1">
-        <input type="text" id="link1" placeholder="Cole o link da imagem 1...">
+        <textarea id="link1" placeholder="Cole o link da imagem 1..."></textarea>
       </div>
       <div class="item">
         <img id="img2" src="" alt="Imagem 2">
-        <input type="text" id="link2" placeholder="Cole o link da imagem 2...">
+        <textarea id="link2" placeholder="Cole o link da imagem 2..."></textarea>
       </div>
       <div class="item">
         <img id="img3" src="" alt="Imagem 3">
-        <input type="text" id="link3" placeholder="Cole o link da imagem 3...">
+        <textarea id="link3" placeholder="Cole o link da imagem 3..."></textarea>
       </div>
       <div class="item">
         <img id="img4" src="" alt="Imagem 4">
-        <input type="text" id="link4" placeholder="Cole o link da imagem 4...">
+        <textarea id="link4" placeholder="Cole o link da imagem 4..."></textarea>
       </div>
     </div>
   </div>
@@ -128,15 +133,15 @@
       for (let i = 1; i <= 4; i++) {
         const savedLink = localStorage.getItem(`imgLink${i}`);
         const img = document.getElementById(`img${i}`);
-        const input = document.getElementById(`link${i}`);
+        const textarea = document.getElementById(`link${i}`);
 
         if (savedLink) {
           img.src = savedLink;
-          input.value = savedLink;
+          textarea.value = savedLink;
         }
 
-        input.addEventListener("input", () => {
-          const url = input.value.trim();
+        textarea.addEventListener("input", () => {
+          const url = textarea.value.trim();
           if (url.startsWith("http://") || url.startsWith("https://")) {
             img.src = url;
             localStorage.setItem(`imgLink${i}`, url);
