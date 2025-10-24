@@ -54,7 +54,7 @@
       padding: 15px;
       text-align: center;
       overflow: hidden;
-      min-height: 280px;
+      min-height: 320px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -89,10 +89,30 @@
       white-space: pre-wrap;
       box-sizing: border-box;
       transition: border-color 0.3s;
+      margin-bottom: 8px;
     }
 
     textarea:focus {
       border-color: #0078d7;
+    }
+
+    .upload-btn {
+      background-color: #0078d7;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 0.85em;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .upload-btn:hover {
+      background-color: #005fa3;
+    }
+
+    input[type="file"] {
+      display: none;
     }
 
     @media (max-width: 1000px) {
@@ -123,12 +143,15 @@
   </div>
 
   <script>
-    // Gera dinamicamente os 16 blocos
     const galeria = document.querySelector('.galeria');
+
+    // Gera dinamicamente os blocos da galeria
     galeria.innerHTML = Array.from({length: 16}, (_, i) => `
       <div class="item">
         <img id="img${i+1}" src="" alt="Imagem ${i+1}">
         <textarea id="link${i+1}" placeholder="Cole o link ou imagem ${i+1}..."></textarea>
+        <button class="upload-btn" id="btn${i+1}">Escolher imagem</button>
+        <input type="file" id="file${i+1}" accept="image/*">
       </div>
     `).join('');
 
@@ -142,7 +165,10 @@
       for (let i = 1; i <= 16; i++) {
         const img = document.getElementById(`img${i}`);
         const textarea = document.getElementById(`link${i}`);
+        const fileInput = document.getElementById(`file${i}`);
+        const uploadBtn = document.getElementById(`btn${i}`);
         const saved = localStorage.getItem(`imgLink${i}`);
+
         if (saved) {
           img.src = saved;
           textarea.value = saved;
@@ -177,6 +203,26 @@
               event.preventDefault();
               return;
             }
+          }
+        });
+
+        // Quando o usuário clica no botão "Escolher imagem"
+        uploadBtn.addEventListener('click', () => {
+          fileInput.click();
+        });
+
+        // Quando o usuário escolhe uma imagem do computador
+        fileInput.addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              const base64 = e.target.result;
+              img.src = base64;
+              textarea.value = base64;
+              salvarImagem(i, base64);
+            };
+            reader.readAsDataURL(file);
           }
         });
       }
