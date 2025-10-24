@@ -35,7 +35,24 @@
     h2 {
       color: #777;
       font-weight: 400;
+      margin-bottom: 10px;
+    }
+
+    .descricao {
+      font-size: 0.95em;
+      color: #555;
+      background-color: #f9f9f9;
+      border-left: 4px solid #0078d7;
+      border-radius: 8px;
+      padding: 10px 15px;
+      display: inline-block;
       margin-bottom: 30px;
+      text-align: left;
+      max-width: 600px;
+    }
+
+    .descricao strong {
+      color: #0078d7;
     }
 
     .galeria {
@@ -131,6 +148,11 @@
       .galeria {
         grid-template-columns: 1fr;
       }
+
+      .descricao {
+        text-align: center;
+        padding: 10px;
+      }
     }
   </style>
 </head>
@@ -138,6 +160,15 @@
   <div class="galeria-container">
     <h1>Galeria de Imagens</h1>
     <h2>Tudo que faz parte do meu mundo pessoal</h2>
+
+    <div class="descricao">
+      📸 Você pode:
+      <ul style="margin: 8px 0 0 20px; padding: 0; text-align: left;">
+        <li>Copiar uma imagem da internet e <strong>colar diretamente</strong> no campo abaixo;</li>
+        <li>Ou colar o <strong>link da imagem</strong> (ex: https://...);</li>
+        <li>Ou clicar em <strong>“Escolher imagem”</strong> para enviar uma foto do seu computador.</li>
+      </ul>
+    </div>
 
     <div class="galeria"></div>
   </div>
